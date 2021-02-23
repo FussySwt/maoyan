@@ -1,108 +1,11 @@
 <template>
     <div class="movie_body">
         <ul>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
+            <li v-for="data in commingsoonList">
+                <div class="pic_show"><img :src="data.poster" alt=""></div>
                 <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p><span class="person">234</span>人想看</p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
-                    <p>2021-3-1上映</p>
-                </div>
-                <div class="btn_pre">
-                    预售
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p><span class="person">234</span>人想看</p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
-                    <p>2021-3-1上映</p>
-                </div>
-                <div class="btn_pre">
-                    预售
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p><span class="person">234</span>人想看</p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
-                    <p>2021-3-1上映</p>
-                </div>
-                <div class="btn_pre">
-                    预售
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p><span class="person">234</span>人想看</p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
-                    <p>2021-3-1上映</p>
-                </div>
-                <div class="btn_pre">
-                    预售
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p><span class="person">234</span>人想看</p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
-                    <p>2021-3-1上映</p>
-                </div>
-                <div class="btn_pre">
-                    预售
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p><span class="person">234</span>人想看</p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
-                    <p>2021-3-1上映</p>
-                </div>
-                <div class="btn_pre">
-                    预售
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p><span class="person">234</span>人想看</p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
-                    <p>2021-3-1上映</p>
-                </div>
-                <div class="btn_pre">
-                    预售
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p><span class="person">234</span>人想看</p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
-                    <p>2021-3-1上映</p>
-                </div>
-                <div class="btn_pre">
-                    预售
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p><span class="person">234</span>人想看</p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
+                    <h2>{{data.name}}</h2>
+                    <p>主演：{{data.actors | actorfilter}}</p>
                     <p>2021-3-1上映</p>
                 </div>
                 <div class="btn_pre">
@@ -110,12 +13,35 @@
                 </div>
             </li>
         </ul>
+        <footer>
+            ----到底了----
+        </footer>
     </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { Indicator } from 'mint-ui';
+import Vue from 'vue'
+Vue.filter('actorfilter',(item)=>{
+    return item.map(item=>item.name).join(" ")
+})
 export default {
-    name: 'CommingSoon'
+    name: 'CommingSoon',
+    computed: {
+        ...mapState(['commingsoonList'])
+    },
+    mounted () {
+        if (this.commingsoonList.length === 0) {
+            Indicator.open({
+                text: 'Loading...',
+                spinnerType: 'fading-circle'
+            });
+            this.$store.dispatch('getCommingSoonMutation')
+            // console.log(this.nowplayingList)
+        }
+        console.log(this.commingsoonList)
+    }
 }
 </script>
 
@@ -139,6 +65,7 @@ export default {
             height: 90px;
             img{
                 width: 100%;
+                height: 100%;
             }
         }
         .info_list{
@@ -187,6 +114,12 @@ export default {
         }
         .btn_pre{
             background-color: #3c9fe6;
+        }
+        footer{
+            height: 50px;
+            background-color: lightgray;
+            line-height: 50px;
+            text-align: center;
         }
     }
 </style>

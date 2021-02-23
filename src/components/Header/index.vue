@@ -17,6 +17,7 @@ export default {
     #header{
         width: 100%;
         height: 50px;
+        box-sizing: border-box;
         color: #fff;
         background:#e54847;
         border-bottom: solid 1px #e54847;

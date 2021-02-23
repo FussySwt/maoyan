@@ -82,61 +82,84 @@
                 <!-- <mt-cell title="Aaron"></mt-cell>
                 <mt-cell title="Alden"></mt-cell>
                 <mt-cell title="Austin"></mt-cell> -->
+                <div class="title">热门城市</div>
                 <ul class="hot_city">
-                    <li><div>123</div>
-                    </li>
-                    <li><div>123</div>
-                    </li>
-                    <li><div>123</div>
-                    </li>
-                    <li><div>123</div>
-                    </li>
-                    <li><div>123</div>
-                    </li>
-                    <li><div>123</div>
-                    </li>
-                    <li><div>123</div>
-                    </li>
-                    <li><div>123</div>
+                    <li v-for="data in isHot" :key="data.cityId" @click="handleHotCity(data.cityId)">
+                        <div>{{data.name}}</div>
                     </li>
                 </ul>
             </div>
-            <mt-index-section index="A">
-                <mt-cell title="Aaron"></mt-cell>
-                <mt-cell title="Alden"></mt-cell>
-                <mt-cell title="Austin"></mt-cell>
-            </mt-index-section>
-            <mt-index-section index="B">
-                <mt-cell title="Baldwin"></mt-cell>
-                <mt-cell title="Braden"></mt-cell>
-            </mt-index-section>
-            <mt-index-section index="Z">
-                <mt-cell title="Zack"></mt-cell>
-                <mt-cell title="Zane"></mt-cell>
-            </mt-index-section>
-            <mt-index-section index="B">
-                <mt-cell title="Baldwin"></mt-cell>
-                <mt-cell title="Braden"></mt-cell>
-            </mt-index-section>
-            <mt-index-section index="Z">
-                <mt-cell title="Zack"></mt-cell>
-                <mt-cell title="Zane"></mt-cell>
-            </mt-index-section>
-            <mt-index-section index="B">
-                <mt-cell title="Baldwin"></mt-cell>
-                <mt-cell title="Braden"></mt-cell>
-            </mt-index-section>
-            <mt-index-section index="Z">
-                <mt-cell title="Zack"></mt-cell>
-                <mt-cell title="Zane"></mt-cell>
+            <mt-index-section :index="data.index" v-for="data in datalist" :key="data.index">
+                <div v-for="city in data.content" :key="city.cityId" @click="handleClick(city.cityId)">
+                    <mt-cell :title="city.name"></mt-cell>
+                </div>
             </mt-index-section>
         </mt-index-list>
     </div>
 </template>
 
 <script>
+import axios from 'axios'
+import { Indicator } from 'mint-ui';
 export default {
-    name: 'City'
+    name: 'City',
+    data () {
+        return {
+            datalist: [],
+            isHot: []
+        }
+    },
+    mounted () {
+        Indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+        });
+        axios({
+            url: 'https://m.maizuo.com/gateway?k=4480335',
+            headers: {
+                'X-Client-Info': '{"a":"3000","ch":"1002","v":"5.0.4","e":"16132234251904032016760833","bc":"341100"}',
+                'X-Host': 'mall.film-ticket.city.list'
+            }
+        }).then(res => {
+            // console.log(res.data.data.cities)
+            this.getCity(res.data.data.cities)
+            this.getHotCity(res.data.data.cities)
+            Indicator.close()
+        })
+    },
+    methods: {
+        getCity (data) {
+            var letterArr = []
+            for (var i = 65; i <= 90; i++) {
+                letterArr.push(String.fromCharCode(i))
+            }
+            var newList = []
+            for (var j = 0; j < letterArr.length; j++){
+                var arr = data.filter(item=>item.pinyin.substring(0,1) === letterArr[j].toLowerCase())
+                if (arr.length > 0) {
+                    newList.push({
+                        index:letterArr[j],
+                        content: arr
+                    })
+                }
+            }
+            this.datalist = newList
+            // console.log(this.datalist)
+        },
+        handleClick (data) {
+            window.localStorage.setItem("cityId",data)
+            this.$router.push('/film')
+        },
+        getHotCity (data) {
+            var arr = []
+            arr = data.filter(item=>item.isHot === 1)
+            this.isHot = arr
+        },
+        handleHotCity (data) {
+            window.localStorage.setItem("cityId",data)
+            this.$router.push('/film')
+        }
+    }
 }
 </script>
 
@@ -166,15 +189,22 @@ export default {
     }
     #city{
         touch-action: none;
+        .title{
+            font-size: 14px;
+            height: 40px;
+            line-height: 40px;
+            background-color: #FAFAFA;
+            text-align: center;
+        }
         .hot_city{
-            height: 180px;
             display: grid;
             grid-template-columns: repeat(3,1fr);
-            grid-template-rows: repeat(3,1fr);
+            // grid-template-rows: repeat(3,1fr);
             li{
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                margin: 20px 0;
                 div{
                     width: 100px;
                     height: 30px;
