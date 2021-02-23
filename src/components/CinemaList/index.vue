@@ -1,122 +1,100 @@
 <template>
-    <div class="cinema_body">
-        <ul>
-            <li>
-                <div>
-                    <span>大地影院(澳东世纪店)</span>
-                    <span class="q"><span class="price">22.9</span> 元起</span>
-                </div>
-                <div class="address">
-                    <span>金州区大连经济技术开发区澳东世纪3层</span>
-                    <span>1763.5km</span>
-                </div>
-                <div class="card">
-                    <div>小吃</div>
-                    <div>折扣卡</div>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <span>大地影院(澳东世纪店)</span>
-                    <span class="q"><span class="price">22.9</span> 元起</span>
-                </div>
-                <div class="address">
-                    <span>金州区大连经济技术开发区澳东世纪3层</span>
-                    <span>1763.5km</span>
-                </div>
-                <div class="card">
-                    <div>小吃</div>
-                    <div>折扣卡</div>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <span>大地影院(澳东世纪店)</span>
-                    <span class="q"><span class="price">22.9</span> 元起</span>
-                </div>
-                <div class="address">
-                    <span>金州区大连经济技术开发区澳东世纪3层</span>
-                    <span>1763.5km</span>
-                </div>
-                <div class="card">
-                    <div>小吃</div>
-                    <div>折扣卡</div>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <span>大地影院(澳东世纪店)</span>
-                    <span class="q"><span class="price">22.9</span> 元起</span>
-                </div>
-                <div class="address">
-                    <span>金州区大连经济技术开发区澳东世纪3层</span>
-                    <span>1763.5km</span>
-                </div>
-                <div class="card">
-                    <div>小吃</div>
-                    <div>折扣卡</div>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <span>大地影院(澳东世纪店)</span>
-                    <span class="q"><span class="price">22.9</span> 元起</span>
-                </div>
-                <div class="address">
-                    <span>金州区大连经济技术开发区澳东世纪3层</span>
-                    <span>1763.5km</span>
-                </div>
-                <div class="card">
-                    <div>小吃</div>
-                    <div>折扣卡</div>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <span>大地影院(澳东世纪店)</span>
-                    <span class="q"><span class="price">22.9</span> 元起</span>
-                </div>
-                <div class="address">
-                    <span>金州区大连经济技术开发区澳东世纪3层</span>
-                    <span>1763.5km</span>
-                </div>
-                <div class="card">
-                    <div>小吃</div>
-                    <div>折扣卡</div>
-                </div>
-            </li>
-        </ul>
+  <div>
+    <div class="cinema_body" :style="isHeight">
+      <ul>
+        <li v-for="data in cinemaList">
+          <div class="cinemaL">
+            <h5>{{ data.name }}</h5>
+            <p class="adrs">{{ data.address }}</p>
+          </div>
+          <div class="cinemaR">
+            <p class="price">￥{{ data.lowPrice / 100 }}起</p>
+            <p>距离未知</p>
+          </div>
+        </li>
+      </ul>
     </div>
+  </div>
 </template>
 
 <script>
+// import axios from 'axios'
+import BS from "better-scroll";
+import { mapState } from "vuex";
 export default {
-    name: 'CinemaList'
-}
+  name: "CinemaList",
+  data() {
+    return {
+      datalist: [],
+      isHeight: {
+        height: "0px",
+      },
+    };
+  },
+  computed: {
+    ...mapState(["cinemaList"]),
+  },
+  mounted() {
+    this.isHeight.height = document.documentElement.clientHeight - 145 + "px";
+  },
+  updated() {
+    this.$nextTick(() => {
+      new BS(".cinema_body", {
+        scrollbar: {
+          fade: true,
+          interactive: false,
+        },
+      });
+    });
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-    #content{
-        .cinema_menu{width: 100%; height: 45px; border-bottom:1px solid #e6e6e6; display: flex; justify-content:space-around; align-items:center; background:white;}
-        .cinema_body{
-            flex:1;
-            overflow:auto;
-            ul{ padding:20px;}
-            li{  border-bottom:1px solid #e6e6e6; margin-bottom: 20px;}
-            div{ margin-bottom: 10px;}
-            .q{ font-size: 11px; color:#f03d37;}
-            .price{ font-size: 18px;}
-            .address{
-                font-size: 13px;
-                color:#666;
-                span:nth-of-type(2){ float:right; }
-            }
-            .card{
-                display: flex;
-                div{ padding: 0 3px; height: 15px; line-height: 15px; border-radius: 2px; color: #f90; border: 1px solid #f90; font-size: 13px; margin-right: 5px;}
-                div.or{ color: #f90; border: 1px solid #f90;}
-                div.bl{ color: #589daf; border: 1px solid #589daf;}
-            }
+#content {
+  .cinema_menu {
+    width: 100%;
+    height: 45px;
+    border-bottom: 1px solid #e6e6e6;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: white;
+  }
+  .cinema_body {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    // height: 400px;
+    ul li {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      border-top: solid 1px #f4f4f4;
+      p {
+        font-size: 13px;
+        color: #797d82;
+      }
+      .cinemaL {
+        min-width: 200px;
+        h5 {
+          font-weight: normal;
         }
+        .adrs {
+          max-width: 300px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+      .cinemaR {
+        width: 70px;
+      }
+      .price {
+        font-size: 14px;
+        color: #ff5f16;
+      }
     }
+  }
+}
 </style>

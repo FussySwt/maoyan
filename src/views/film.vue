@@ -4,7 +4,7 @@
         <div id="content">
             <div class="movie_menu">
                 <router-link tag="div" to="/city" class="city_name">
-                    <span>滁州</span><i class="iconfont icon-xiala"></i>
+                    <span>{{cityName.length>0 ? cityName : '暂无定位'}}</span><i class="iconfont icon-xiala"></i>
                 </router-link>
                 <div class="hot_switch">
                     <router-link tag="div" to="/film/nowplaying" class="hot_item" active-class="active">正在热映</router-link>
@@ -25,11 +25,37 @@
 <script>
 import headbar from '@/components/Header'
 import tabbar from '@/components/Tabbar'
+import axios from 'axios'
 export default {
     name: 'Film',
+    data () {
+        return {
+            cityName: ""
+        }
+    },
     components: {
         headbar,
         tabbar
+    },
+    mounted () {
+        if (window.localStorage.getItem("cityId") !== null) {
+            axios({
+                url: 'https://m.maizuo.com/gateway?k=9089981',
+                headers: {
+                    'X-Client-Info': '{"a":"3000","ch":"1002","v":"5.0.4","e":"16132234251904032016760833","bc":"110100"}',
+                    'X-Host': 'mall.film-ticket.city.list'
+                }
+            }).then(res => {
+                // console.log(res.data.data.cities)
+                var id = window.localStorage.getItem("cityId")
+                var name = ""
+                name = res.data.data.cities.filter(item=>item.cityId == id)
+                // console.log(name[0].name)
+                this.cityName = name[0].name
+            })
+        } else {
+            console.log('没有城市id')
+        }
     }
 }
 </script>

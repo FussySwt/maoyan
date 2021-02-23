@@ -1,157 +1,47 @@
 <template>
-    <div class="movie_body">
+    <div class="movie_body" v-if="nowplayingList.length > 0">
         <ul>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
+            <li v-for="data in nowplayingList">
+                <div class="pic_show"><img :src="data.poster" alt=""></div>
                 <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p>观众评<span class="grade">9.2</span></p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
-                    <p>今天55家影院放映607场</p>
-                </div>
-                <div class="btn_mall">
-                    购票
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p>观众评<span class="grade">9.2</span></p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
-                    <p>今天55家影院放映607场</p>
-                </div>
-                <div class="btn_mall">
-                    购票
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p>观众评<span class="grade">9.2</span></p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
-                    <p>今天55家影院放映607场</p>
-                </div>
-                <div class="btn_mall">
-                    购票
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p>观众评<span class="grade">9.2</span></p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
-                    <p>今天55家影院放映607场</p>
-                </div>
-                <div class="btn_mall">
-                    购票
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p>观众评<span class="grade">9.2</span></p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
-                    <p>今天55家影院放映607场</p>
-                </div>
-                <div class="btn_mall">
-                    购票
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p>观众评<span class="grade">9.2</span></p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
-                    <p>今天55家影院放映607场</p>
-                </div>
-                <div class="btn_mall">
-                    购票
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p>观众评<span class="grade">9.2</span></p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
-                    <p>今天55家影院放映607场</p>
-                </div>
-                <div class="btn_mall">
-                    购票
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p>观众评<span class="grade">9.2</span></p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
-                    <p>今天55家影院放映607场</p>
-                </div>
-                <div class="btn_mall">
-                    购票
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p>观众评<span class="grade">9.2</span></p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
-                    <p>今天55家影院放映607场</p>
-                </div>
-                <div class="btn_mall">
-                    购票
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p>观众评<span class="grade">9.2</span></p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
-                    <p>今天55家影院放映607场</p>
-                </div>
-                <div class="btn_mall">
-                    购票
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p>观众评<span class="grade">9.2</span></p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
-                    <p>今天55家影院放映607场</p>
-                </div>
-                <div class="btn_mall">
-                    购票
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/images/3.jpg" alt=""></div>
-                <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p>观众评<span class="grade">9.2</span></p>
-                    <p>主演：任素汐，沈腾，贾玲</p>
-                    <p>今天55家影院放映607场</p>
+                    <h2>{{data.name}}</h2>
+                    <p>观众评分 <span class="grade">{{data.grade}}</span></p>
+                    <p>主演：{{data.actors | actorfilter}}</p>
+                    <p>{{data.nation}} | {{data.runtime}}分钟</p>
                 </div>
                 <div class="btn_mall">
                     购票
                 </div>
             </li>
         </ul>
+        <footer>
+            ----到底了----
+        </footer>
     </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { Indicator } from 'mint-ui';
+import Vue from 'vue'
+Vue.filter('actorfilter',(item)=>{
+    return item.map(item=>item.name).join(" ")
+})
 export default {
-    name: 'Nowplaying'
+    name: 'Nowplaying',
+    computed: {
+        ...mapState(['nowplayingList'])
+    },
+    mounted () {
+        if (this.nowplayingList.length === 0) {
+            Indicator.open({
+                text: 'Loading...',
+                spinnerType: 'fading-circle'
+            });
+            this.$store.dispatch('getNowplayingAction')
+            // console.log(this.nowplayingList)
+        }
+    }
 }
 </script>
 
@@ -223,6 +113,12 @@ export default {
         }
         .btn_pre{
             background-color: #3c9fe6;
+        }
+        footer{
+            height: 50px;
+            background-color: lightgray;
+            line-height: 50px;
+            text-align: center;
         }
     }
 </style>
