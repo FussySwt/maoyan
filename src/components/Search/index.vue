@@ -3,38 +3,86 @@
         <div class="search_input">
             <div class="search_input_wrapper">
                 <i class="iconfont icon-sousuo"></i>
-                <input type="text">
+                <input type="text" v-model="filmMessage">
             </div>					
         </div>
         <div class="search_result">
             <h3>电影/电视剧/综艺</h3>
-            <ul>
-                <li>
-                    <div class="img"><img src="/images/4.jpg"></div>
+            <ul v-if="movieList.length > 0">
+                <li v-for="data in movieList">
+                    <div class="img"><img :src="data.img | imgfilter" alt=""></div>
                     <div class="info">
-                        <p><span>无名之辈</span><span>8.5</span></p>
-                        <p>A Cool Fish</p>
-                        <p>剧情,喜剧,犯罪</p>
-                        <p>2018-11-16</p>
+                        <p><span>{{data.nm}}</span></p>
+                        <p v-if="data.enm">{{data.enm}}</p>
+                        <p>{{data.cat}}</p>
+                        <p>{{data.rt}}</p>
+                    </div>
+                    <div class="score">
+                        <span>{{data.sc}}</span>
                     </div>
                 </li>
-                <li>
-                    <div class="img"><img src="/images/4.jpg"></div>
-                    <div class="info">
-                        <p><span>无名之辈</span><span>8.5</span></p>
-                        <p>A Cool Fish</p>
-                        <p>剧情,喜剧,犯罪</p>
-                        <p>2018-11-16</p>
-                    </div>
-                </li>
+                <div class="total" v-show="isTotal > 3" @click="handleClick(filmMessage)">查看全部{{isTotal}}部影视剧</div>
             </ul>
+            <div v-else class="noMovie">
+                <!-- 不存在该电影名 -->
+                <img src="/images/notFound.jpg" alt="">
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios'
+import Vue from 'vue'
+Vue.filter('imgfilter',(item)=>{
+    return item.replace('/w.h','/120.180/')
+})
 export default {
-    name: 'Search'
+    name: 'Search',
+    data () {
+        return {
+            filmMessage: '',
+            movieList: [],
+            isTotal: null
+        }
+    },
+    watch: {
+        filmMessage(val){
+            var that = this;
+            this.cancelRequest();
+            axios.get(`/ajax/search?kw=${val}&cityId=1&stype=-1`,{
+                cancelToken: new axios.CancelToken(function(c) {
+                    that.source = c;
+                })
+            }).then(res=>{
+                console.log(res.data.movies)
+                if(res.data.movies){
+                    this.movieList = res.data.movies.list
+                    this.isTotal = res.data.movies.total
+                }else{
+                    this.movieList = []
+                    this.isTotal = null
+                }
+            }).catch((err) => {
+                if (axios.isCancel(err)) {
+                    console.log('Rquest canceled', err.message); //请求如果被取消，这里是返回取消的message
+                } else {
+                    //handle error
+                    console.log(err);
+                }
+            })   
+        }
+    },
+    methods: {
+        handleClick(filmName){
+            this.$router.push({name:'searchList',params:{fName:filmName}})
+        },
+        cancelRequest(){
+            if(typeof this.source ==='function'){
+                this.source('终止请求')
+            }
+        }
+    }
 }
 </script>
 
@@ -59,21 +107,35 @@ export default {
         }
         .search_result{
             h3{ font-size: 15px; color: #999; padding: 9px 15px; border-bottom: 1px solid #e6e6e6;}
-            li{ border-bottom:1px #c9c9c9 dashed; padding: 10px 15px; box-sizing:border-box; display: flex;}
+            ul{
+                width: 100%;
+                li{ border-bottom:1px #c9c9c9 solid; padding: 10px 15px; box-sizing:border-box; display: flex;width: 100%;}
+            }
             .img{
                 width: 60px;
-                float:left;
+                flex-shrink: 0;
                 img{
                     width: 100%;
-                    }
+                    height: 100%;
+                }
             }
             .info{
-                float:left;
                 margin-left: 15px;
+                flex-basis: 0;
                 flex:1;
-                p{ height: 22px; display: flex; line-height: 22px; font-size: 12px;}
-                p:nth-of-type(1) span:nth-of-type(1){ font-size: 18px; flex:1; }
-                p:nth-of-type(1) span:nth-of-type(2){ font-size: 16px; color:#fc7103;}
+                white-space: nowrap;overflow: hidden;text-overflow: ellipsis;
+                p{ height: 22px; line-height: 22px; font-size: 10px;}
+                p:first-child{display: flex;justify-content: space-between}
+                p:nth-of-type(1) span{ font-size: 16px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+                p{white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+            }
+            .score{ font-size: 16px; color:#fc7103;}
+            .total{height: 40px;line-height: 40px;color: #EF4238;text-align: center;border-bottom: 10px solid #F5F5F5;}
+            .noMovie{
+                width: 100%;
+                img{
+                    width: 100%;
+                }
             }
         }
     }
