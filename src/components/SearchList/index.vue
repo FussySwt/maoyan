@@ -6,7 +6,8 @@
             </headbar>
         </header>
         <div class="filter"></div>
-        <ul class="films" v-infinite-scroll="loadMore"
+        <loader v-if="isAppear"></loader>
+        <ul v-else class="films" v-infinite-scroll="loadMore"
   infinite-scroll-disabled="loading" infinite-scroll-immediate-check="false"
   infinite-scroll-distance="10">
             <li v-for="data in datalist">
@@ -19,7 +20,7 @@
                     <p>{{data.cat}}</p>
                     <p>{{data.rt}}</p>
                 </div>
-                <div class="score">{{data.sc===0?'暂无评分':data.sc}}</div>
+                <div class="score" :style="data.sc===0?'':'color:orange'">{{data.sc===0?'暂无评分':data.sc}}</div>
             </li>
             <div v-if="isShow" class="loadingModule" ref="loading">加载中......</div>
             <div v-else class="loadingModule">----已经到底了----</div>
@@ -31,31 +32,35 @@
 import axios from 'axios'
 import headbar from '@/components/Header'
 import Vue from 'vue'
-import { Indicator } from 'mint-ui';
+// import { Indicator } from 'mint-ui';
+import loader from '@/components/Loader'
 Vue.filter('imgfilter',(item)=>{
     return item.replace('/w.h/','/120.180/')
 })
 export default {
     components: {
-        headbar
+        headbar,
+        loader
     },
     data () {
         return {
             datalist: [],
             loading:false,
             isShow:true,
-            count: 20
+            count: 20,
+            isAppear:true
         }
     },
     mounted () {
         // console.log(this.$route.params.fName)
-        Indicator.open({
-            text: '加载中...',
-            spinnerType: 'fading-circle'
-        });
+        // Indicator.open({
+        //     text: '加载中...',
+        //     spinnerType: 'fading-circle'
+        // });
         axios.get(`/searchlist/movies?keyword=${this.$route.params.fName}&ci=1&offset=20&limit=20`).then(res=>{
             // console.log(res.data)
-            Indicator.close()
+            // Indicator.close()
+            this.isAppear = false
             this.datalist = res.data.movies
             if(this.datalist.length === 0){
                 this.isShow = false

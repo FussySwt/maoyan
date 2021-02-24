@@ -29,7 +29,6 @@
 <script>
 import headbar from '@/components/Header'
 import cinemaList from '@/components/CinemaList'
-import { mapState } from 'vuex'
 import { Indicator } from 'mint-ui'
 import tabbar from '@/components/Tabbar'
 import axios from 'axios'
@@ -114,7 +113,7 @@ export default {
 
 <style lang="scss" scoped>
     .rotate{
-        transform: rotateZ(-180deg);
+        transform: rotateZ(180deg);
     }
     #content{
         .cinema_menu{
@@ -127,7 +126,7 @@ export default {
             align-items:center;
             background:white;
             .city_switch i{
-                transition: all .5s;
+                transition: all .3s;
                 display: inline-block;
                 //  transform: rotateZ(-180deg);
             }

@@ -23,7 +23,7 @@
                 </li>
                 <div class="total" v-show="isTotal > 3" @click="handleClick(filmMessage)">查看全部{{isTotal}}部影视剧</div>
             </ul>
-            <div v-else class="noMovie">
+            <div v-else class="noMovie" ref="noMovie">
                 <!-- 不存在该电影名 -->
                 <img src="/images/notFound.jpg" alt="">
             </div>
@@ -55,7 +55,7 @@ export default {
                     that.source = c;
                 })
             }).then(res=>{
-                console.log(res.data.movies)
+                // console.log(res.data.movies)
                 if(res.data.movies){
                     this.movieList = res.data.movies.list
                     this.isTotal = res.data.movies.total
@@ -68,7 +68,8 @@ export default {
                     console.log('Rquest canceled', err.message); //请求如果被取消，这里是返回取消的message
                 } else {
                     //handle error
-                    console.log(err);
+                    // console.log(err);
+                    this.movieList = []
                 }
             })   
         }
@@ -82,6 +83,9 @@ export default {
                 this.source('终止请求')
             }
         }
+    },
+    updated () {
+        // this.$refs.noMovie.style.display = "block"
     }
 }
 </script>
@@ -133,6 +137,7 @@ export default {
             .total{height: 40px;line-height: 40px;color: #EF4238;text-align: center;border-bottom: 10px solid #F5F5F5;}
             .noMovie{
                 width: 100%;
+                // display: none;
                 img{
                     width: 100%;
                 }
