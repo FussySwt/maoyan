@@ -1,80 +1,7 @@
 <template>
-    <!-- <div class="city_body">
-        <div class="city_list">
-            <div class="city_hot">
-                <h2>热门城市</h2>
-                <ul class="clearfix">
-                    <li>安徽</li>
-                    <li>安徽</li>
-                    <li>安徽</li>
-                    <li>安徽</li>
-                    <li>安徽</li>
-                    <li>安徽</li>
-                    <li>安徽</li>
-                    <li>安徽</li>
-                </ul>
-            </div>
-            <div class="city_sort">
-                <div>
-                    <h2>A</h2>
-                    <ul>
-                        <li>滁州</li>
-                        <li>滁州</li>
-                        <li>滁州</li>
-                        <li>滁州</li>
-                    </ul>
-                </div>
-                <div>
-                    <h2>B</h2>
-                    <ul>
-                        <li>滁州</li>
-                        <li>滁州</li>
-                        <li>滁州</li>
-                        <li>滁州</li>
-                    </ul>
-                </div>
-                <div>
-                    <h2>C</h2>
-                    <ul>
-                        <li>滁州</li>
-                        <li>滁州</li>
-                        <li>滁州</li>
-                        <li>滁州</li>
-                    </ul>
-                </div>
-                <div>
-                    <h2>D</h2>
-                    <ul>
-                        <li>滁州</li>
-                        <li>滁州</li>
-                        <li>滁州</li>
-                        <li>滁州</li>
-                    </ul>
-                </div>
-                <div>
-                    <h2>E</h2>
-                    <ul>
-                        <li>滁州</li>
-                        <li>滁州</li>
-                        <li>滁州</li>
-                        <li>滁州</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="city_index">
-            <ul>
-                <li>A</li>
-                <li>B</li>
-                <li>C</li>
-                <li>D</li>
-                <li>E</li>
-            </ul>
-        </div>
-    </div> -->
     <div>
         <header>
-            <router-link tag="div" to="/film/nowplaying" class="quit">x</router-link>
+            <router-link tag="div" to="/film/nowplaying" class="quit"><span class="iconfont icon-guanbi"></span></router-link>
             <h4>当前城市</h4>
         </header>
         <mt-index-list id="city">
@@ -166,7 +93,7 @@ export default {
 <style lang="scss" scoped>
     header{
         height: 40px;
-        border-bottom: 10px solid lightblue;
+        border-bottom: 10px solid #F4F4F4;
         position: relative;
         .quit{
             position: absolute;
@@ -195,6 +122,7 @@ export default {
             line-height: 40px;
             background-color: #FAFAFA;
             text-align: center;
+            border-bottom: 1px solid #D9D9D9;
         }
         .hot_city{
             display: grid;
@@ -217,72 +145,4 @@ export default {
             }
         }
     }
-    /* #content .city_body{
-        margin-top: 45px;
-        display: flex;
-        width: 100%;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        .city_list{
-            flex: 1;
-            overflow: auto;
-            background:#FFF5F0;
-        }
-        .city_list::-webkit-scrollbar{
-            background-color: transparent;
-            width: 0;
-        }
-        .city_hot{
-            margin-top: 20px;
-            h2{
-                padding-left: 15px;
-                line-height: 30px;
-                font-size: 14px;
-                background:#F0F0F0;
-                font-weight: normal;
-            }
-            ul li{
-                float: left;
-                background:#fff;
-                width: 29%;
-                height: 33px;
-                margin-top: 15px;
-                margin-left: 3%;
-                padding: 0 4px;
-                border: 1px solid #e6e6e6;
-                border-radius: 3px;
-                line-height: 33px;
-                text-align: center;
-                box-sizing: border-box;
-            }
-        }
-        .city_sort{
-            div{
-                margin-top: 20px;
-            }
-            h2{
-                padding-left: 15px;
-                line-height: 30px;
-                font-size: 14px;
-                background:#F0F0F0;
-                font-weight: normal;
-            }
-            ul{
-                padding-left: 10px;
-                margin-top: 10px;
-                li{
-                    line-height: 30px;
-                }
-            }
-        }
-        .city_index{
-            width: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            text-align: center;
-            border-left: 1px #e6e6e6 solid;
-        }
-    } */
 </style>

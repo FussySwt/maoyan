@@ -2,7 +2,7 @@
     <div id="main">
         <headbar title="猫眼电影"></headbar>
         <div id="content">
-            <div class="movie_menu">
+            <div class="movie_menu" ref="movieMenu">
                 <router-link tag="div" to="/city" class="city_name">
                     <span>{{cityName.length>0 ? cityName : '暂无定位'}}</span><i class="iconfont icon-xiala"></i>
                 </router-link>
@@ -14,6 +14,7 @@
                     <i class="iconfont icon-sousuo"></i>
                 </router-link>
             </div>
+            <div class="filed" ref="filed"></div>
             <keep-alive>
                 <router-view></router-view>
             </keep-alive>
@@ -56,6 +57,24 @@ export default {
         } else {
             console.log('没有城市id')
         }
+        
+        window.onscroll = this.handleScroll
+    },
+    beforeDestroy () {
+        window.onscroll = null
+    },
+    methods: {
+        handleScroll(){
+            // console.log(document.documentElement.scrollTop)
+            if(document.documentElement.scrollTop >= 50) {
+                // console.log(1)
+                this.$refs.movieMenu.classList.add("fixed")
+                this.$refs.filed.style.height = '45px'
+            }else{
+                this.$refs.movieMenu.classList.remove("fixed")
+                this.$refs.filed.style.height = '0px'
+            }
+        }
     }
 }
 </script>
@@ -69,12 +88,19 @@ export default {
         position: relative;
         display: flex;
         flex-direction: column;
+        .fixed{
+            position: fixed;
+            top: 0;
+        }
         .movie_menu{
             width: 100%;
             height: 45px;
+            box-sizing: border-box;
             border-bottom: 1px solid #e6e6e6;
             display: flex;
             justify-content: space-between;
+            background-color: white;
+            z-index: 9;
             .city_name{
                 margin-left: 20px;
                 height: 100%;

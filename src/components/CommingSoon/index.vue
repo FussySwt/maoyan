@@ -1,7 +1,7 @@
 <template>
     <div class="movie_body">
         <ul>
-            <li v-for="data in commingsoonList">
+            <li v-for="data in commingsoonList" :key="data.filmId" @click="handleClick(data.filmId)">
                 <div class="pic_show"><img :src="data.poster" alt=""></div>
                 <div class="info_list">
                     <h2>{{data.name}}</h2>
@@ -13,7 +13,7 @@
                 </div>
             </li>
         </ul>
-        <footer>
+        <footer class="hide" ref="foot">
             ----到底了----
         </footer>
     </div>
@@ -34,13 +34,21 @@ export default {
     mounted () {
         if (this.commingsoonList.length === 0) {
             Indicator.open({
-                text: 'Loading...',
+                text: '加载中...',
                 spinnerType: 'fading-circle'
             });
             this.$store.dispatch('getCommingSoonMutation')
             // console.log(this.nowplayingList)
         }
-        console.log(this.commingsoonList)
+        // console.log(this.commingsoonList)
+    },
+    updated () {
+        this.$refs.foot.classList.remove('hide')
+    },
+    methods: {
+        handleClick(data) {
+            this.$router.push({name:'details',params:{uid:data}})
+        }
     }
 }
 </script>
@@ -117,9 +125,12 @@ export default {
         }
         footer{
             height: 50px;
-            background-color: lightgray;
+            background-color: #FAFAFA;
             line-height: 50px;
             text-align: center;
+        }
+        .hide{
+            display: none;
         }
     }
 </style>

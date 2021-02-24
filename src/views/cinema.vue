@@ -4,7 +4,7 @@
         <div id="content">
 			<div class="cinema_menu">
 				<div class="city_switch" @click="handleClick()">
-					全城 <i class="iconfont icon-xiala"></i>
+					全城 <i class="iconfont icon-xiala" ref="rot"></i>
 				</div>
 				<div class="brand_swtich">
 					品牌 <i class="iconfont icon-xiala"></i>
@@ -88,10 +88,11 @@ export default {
             // console.log(this.$refs.cityMap.offsetHeight)
             if(!this.isMove){
                 this.$refs.cityMap.style.display = "block"
-                // console.log(this.$refs.cinemas.$el.backgroundColor)
+                this.$refs.rot.classList.add('rotate')
                 this.isMove = true
             }else{
                 this.$refs.cityMap.style.display = "none"
+                this.$refs.rot.classList.remove('rotate')
                 this.isMove=false
             }
         },
@@ -112,8 +113,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    .rotate{
+        transform: rotateZ(-180deg);
+    }
     #content{
-        .cinema_menu{width: 100%; height: 45px;box-sizing: border-box; border-bottom:1px solid #e6e6e6; display: flex; justify-content:space-around; align-items:center; background:white;}
+        .cinema_menu{
+            width: 100%;
+            height: 45px;
+            box-sizing: border-box;
+            border-bottom:1px solid #e6e6e6;
+            display: flex;
+            justify-content:space-around;
+            align-items:center;
+            background:white;
+            .city_switch i{
+                transition: all .5s;
+                display: inline-block;
+                //  transform: rotateZ(-180deg);
+            }
+        }
         .cinema_menu_city{
             position: absolute;
             top: 45px;z-index: 10;

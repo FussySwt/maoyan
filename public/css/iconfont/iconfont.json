@@ -20,11 +20,25 @@
       "unicode_decimal": 59005
     },
     {
+      "icon_id": "8542627",
+      "name": "关  闭",
+      "font_class": "guanbi",
+      "unicode": "e69b",
+      "unicode_decimal": 59035
+    },
+    {
       "icon_id": "9896419",
       "name": "下 拉",
       "font_class": "xiala",
       "unicode": "e554",
       "unicode_decimal": 58708
+    },
+    {
+      "icon_id": "10403301",
+      "name": "左滑",
+      "font_class": "zuohua",
+      "unicode": "e620",
+      "unicode_decimal": 58912
     },
     {
       "icon_id": "11372734",

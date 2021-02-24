@@ -1,10 +1,10 @@
 <template>
     <div class="movie_body" v-if="nowplayingList.length > 0">
         <ul>
-            <li v-for="data in nowplayingList">
+            <li v-for="data in nowplayingList" :key="data.filmId" @click="handleClick(data.filmId)">
                 <div class="pic_show"><img :src="data.poster" alt=""></div>
                 <div class="info_list">
-                    <h2>{{data.name}}</h2>
+                    <h2>{{data.name}} <span>{{data.filmType.name}}</span></h2>
                     <p>观众评分 <span class="grade">{{data.grade}}</span></p>
                     <p>主演：{{data.actors | actorfilter}}</p>
                     <p>{{data.nation}} | {{data.runtime}}分钟</p>
@@ -35,11 +35,15 @@ export default {
     mounted () {
         if (this.nowplayingList.length === 0) {
             Indicator.open({
-                text: 'Loading...',
+                text: '加载中...',
                 spinnerType: 'fading-circle'
             });
             this.$store.dispatch('getNowplayingAction')
-            // console.log(this.nowplayingList)
+        }
+    },
+    methods: {
+        handleClick(data) {
+            this.$router.push({name:'details',params:{uid:data}})
         }
     }
 }
@@ -65,6 +69,7 @@ export default {
             height: 90px;
             img{
                 width: 100%;
+                height: 100%;
             }
         }
         .info_list{
@@ -75,9 +80,21 @@ export default {
                 font-size: 17px;
                 line-height: 24px;
                 width: 150px;
+                font-weight: normal;
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
+                span{
+                    font-size: 14px;
+                    color: white;
+                    display: inline-block;
+                    width: 25px;
+                    height: 18px;
+                    background-color: lightgray;
+                    border-radius: 5px;
+                    text-align: center;
+                    line-height: 18px;
+                }
             }
             p{
                 font-size: 13px;
@@ -116,7 +133,7 @@ export default {
         }
         footer{
             height: 50px;
-            background-color: lightgray;
+            background-color: #FAFAFA;
             line-height: 50px;
             text-align: center;
         }
