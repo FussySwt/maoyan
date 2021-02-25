@@ -84,7 +84,8 @@ export default {
       }
     },
     handleClick () {
-      this.$router.push('/film')
+      // this.$router.push('/film')
+      this.$router.back()
     },
     handleScroll () {
       if (document.documentElement.scrollTop >= 20) {
@@ -93,9 +94,6 @@ export default {
         this.$refs.mytitle.classList.add('hide')
       }
     }
-  },
-  beforeUpdate () {
-    window.onscroll = null
   },
   mounted () {
     /* console.log(this.$route.params.uid)
@@ -129,8 +127,10 @@ export default {
         })
       }
     })
-
     window.onscroll = this.handleScroll
+  },
+  deforeDestroy(){
+    window.onscroll = null
   },
   components: {
     detailSwiper

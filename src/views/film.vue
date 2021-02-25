@@ -41,7 +41,7 @@ export default {
         tabbar
     },
     mounted () {
-        if (window.localStorage.getItem("cityId")) {
+        /* if (window.localStorage.getItem("cityId")) {
             axios({
                 url: 'https://m.maizuo.com/gateway?k=9089981',
                 headers: {
@@ -49,7 +49,7 @@ export default {
                     'X-Host': 'mall.film-ticket.city.list'
                 }
             }).then(res => {
-                // console.log(res.data.data.cities)
+                console.log(res.data.data.cities)
                 for(var i=0;i<res.data.data.cities.length;i++){
                     this.cities.push({id:res.data.data.cities[i].cityId,name:res.data.data.cities[i].name})
                 }
@@ -61,7 +61,30 @@ export default {
             })
         } else {
             console.log('没有城市id')
-        }
+        } */
+
+        axios({
+            url: 'https://m.maizuo.com/gateway?k=9089981',
+            headers: {
+                'X-Client-Info': '{"a":"3000","ch":"1002","v":"5.0.4","e":"16132234251904032016760833","bc":"110100"}',
+                'X-Host': 'mall.film-ticket.city.list'
+            }
+        }).then(res => {
+            // console.log(res.data.data.cities)
+            for(var i=0;i<res.data.data.cities.length;i++){
+                this.cities.push({id:res.data.data.cities[i].cityId,name:res.data.data.cities[i].name})
+            }
+            if(window.localStorage.getItem("cityId")){
+                var id = window.localStorage.getItem("cityId")
+                var name = ""
+                name = res.data.data.cities.filter(item=>item.cityId == id)
+                this.cityName = name[0].name
+            } else {
+                console.log('没有城市id')
+            } 
+            // console.log(name[0].name)
+        })
+
         var _this = this
         if(!_this.$store.state.isLocate){
             setTimeout(() => {
@@ -75,6 +98,7 @@ export default {
                                 break
                             }else{continue}
                         }
+                        // console.log(_this.cities)
                         if(city.id == window.localStorage.getItem("cityId")){
                         }else{
                             messagebox({

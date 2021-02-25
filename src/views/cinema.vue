@@ -49,7 +49,7 @@ export default {
         if(window.localStorage.getItem("cityId") != null){
             var cityId = window.localStorage.getItem("cityId")
             Indicator.open({
-                text: 'Loading...',
+                text: '加载中...',
                 spinnerType: 'fading-circle'
             });
             axios({
