@@ -8,7 +8,7 @@
                 </router-link>
                 <div class="hot_switch">
                     <router-link tag="div" to="/film/nowplaying" class="hot_item" active-class="active">正在热映</router-link>
-                    <router-link tag="div" to="/film/commingsoon" class="hot_item" active-class="active">正在热映</router-link>
+                    <router-link tag="div" to="/film/commingsoon" class="hot_item" active-class="active">即将上映</router-link>
                 </div>
                 <router-link tag="div" to="/film/search" class="search_entry" active-class="active">
                     <i class="iconfont icon-sousuo"></i>
@@ -26,12 +26,14 @@
 <script>
 import headbar from '@/components/Header'
 import tabbar from '@/components/Tabbar'
+import { messagebox } from '@/components/JS'
 import axios from 'axios'
 export default {
     name: 'Film',
     data () {
         return {
-            cityName: ""
+            cityName: "",
+            cities: []
         }
     },
     components: {
@@ -39,7 +41,7 @@ export default {
         tabbar
     },
     mounted () {
-        if (window.localStorage.getItem("cityId") !== null) {
+        if (window.localStorage.getItem("cityId")) {
             axios({
                 url: 'https://m.maizuo.com/gateway?k=9089981',
                 headers: {
@@ -48,6 +50,9 @@ export default {
                 }
             }).then(res => {
                 // console.log(res.data.data.cities)
+                for(var i=0;i<res.data.data.cities.length;i++){
+                    this.cities.push({id:res.data.data.cities[i].cityId,name:res.data.data.cities[i].name})
+                }
                 var id = window.localStorage.getItem("cityId")
                 var name = ""
                 name = res.data.data.cities.filter(item=>item.cityId == id)
@@ -56,6 +61,44 @@ export default {
             })
         } else {
             console.log('没有城市id')
+        }
+        var _this = this
+        if(!_this.$store.state.isLocate){
+            setTimeout(() => {
+                axios.get('/geo/').then(res=>{
+                    if(res.data.address){
+                        var city = {}
+                        for(var i=0;i<_this.cities.length;i++){
+                            if(res.data.address.indexOf(_this.cities[i].name) >= 0){
+                                // console.log(_this.cities[i])
+                                city = _this.cities[i]
+                                break
+                            }else{continue}
+                        }
+                        if(city.id == window.localStorage.getItem("cityId")){
+                        }else{
+                            messagebox({
+                                title:'定位',
+                                content:res.data.address,
+                                cancel:'取消',
+                                ok:'切换定位',
+                                handleOk(){
+                                    console.log(_this.cities)
+                                    console.log(city)
+                                    if(city != null){
+                                        window.localStorage.setItem("cityId",city.id)
+                                        // window.localStorage.setItem("isLocate",true)
+                                        window.location.reload()
+                                    }
+                                },
+                                handleCancel(){
+                                    _this.$store.commit('changeLocate',true)
+                                }
+                            })
+                        }
+                    }
+                })
+            }, 1500);
         }
         
         window.onscroll = this.handleScroll
@@ -82,12 +125,11 @@ export default {
 <style lang="scss" scoped>
     .myClass{color: red;}
     #content{
-        flex: 1;
         overflow: auto;
         margin-bottom: 50px;
-        position: relative;
-        display: flex;
-        flex-direction: column;
+        // position: relative;
+        // display: flex;
+        // flex-direction: column;
         .fixed{
             position: fixed;
             top: 0;
@@ -105,6 +147,9 @@ export default {
                 margin-left: 20px;
                 height: 100%;
                 line-height: 45px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
             .city_name.active{
                 color: #ef4238;

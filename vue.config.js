@@ -8,6 +8,10 @@ module.exports = {
             '/searchlist': {
                 target: 'https://m.maoyan.com',
                 changeOrigin: true
+            },
+            '/geo': {
+                target: 'https://api.asilu.com',
+                changeOrigin: true
             }
         }
     }

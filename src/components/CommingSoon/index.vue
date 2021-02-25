@@ -32,14 +32,16 @@ export default {
         ...mapState(['commingsoonList'])
     },
     mounted () {
-        if (this.commingsoonList.length === 0) {
-            Indicator.open({
-                text: '加载中...',
-                spinnerType: 'fading-circle'
-            });
-            this.$store.dispatch('getCommingSoonMutation')
-            // console.log(this.nowplayingList)
+        Indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+        });
+        if(window.localStorage.getItem("cityId")){
+            this.$store.dispatch('getCommingSoonMutation',window.localStorage.getItem("cityId"))
+        } else {
+            this.$store.dispatch('getCommingSoonMutation',110100)
         }
+            // console.log(this.nowplayingList)
         // console.log(this.commingsoonList)
     },
     updated () {

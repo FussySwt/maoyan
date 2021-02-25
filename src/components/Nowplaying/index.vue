@@ -1,12 +1,15 @@
 <template>
-    <div class="movie_body" v-if="nowplayingList.length > 0">
-        <ul>
-            <li v-for="data in nowplayingList" :key="data.filmId" @click="handleClick(data.filmId)">
+    <div class="movie_body" v-show="nowplayingList.length > 0">
+        <ul v-infinite-scroll="loadMore"
+  infinite-scroll-disabled="loading"
+  infinite-scroll-distance="10">
+            <li v-for="(data,index) in nowplayingList" :key="data.filmId" @click="handleClick(data.filmId)">
                 <div class="pic_show"><img :src="data.poster" alt=""></div>
                 <div class="info_list">
                     <h2>{{data.name}} <span>{{data.filmType.name}}</span></h2>
                     <p>观众评分 <span class="grade">{{data.grade}}</span></p>
-                    <p>主演：{{data.actors | actorfilter}}</p>
+                    <!-- <p>主演：{{data.actors | actorfilter}}</p> -->
+                    <p>主演：{{actorfilt(index)}}</p>
                     <p>{{data.nation}} | {{data.runtime}}分钟</p>
                 </div>
                 <div class="btn_mall">
@@ -24,26 +27,65 @@
 import { mapState } from 'vuex'
 import { Indicator } from 'mint-ui';
 import Vue from 'vue'
-Vue.filter('actorfilter',(item)=>{
-    return item.map(item=>item.name).join(" ")
-})
+// Vue.filter('actorfilter',(item)=>{
+//     return item.map(item=>item.name).join(" ")
+//     // var obj = item.filter(item=>item.name)
+// })
 export default {
     name: 'Nowplaying',
+    data(){
+        return {
+            loading:false,
+            actors: []
+        }
+    },
     computed: {
-        ...mapState(['nowplayingList'])
+        ...mapState(['nowplayingList']),
+        actorfilt(){
+            return function(index){
+                var arr = []
+                for(var i = 0; i < this.nowplayingList.length;i++){
+                    if(i == index){
+                        arr = this.nowplayingList[index].actors
+                        break
+                    }
+                }
+                var newArr = []
+                for(var j = 0; j < arr.length; j++){
+                    newArr.push(arr[j].name)
+                }
+                return newArr.join(" ")
+            }
+        }
     },
     mounted () {
-        if (this.nowplayingList.length === 0) {
+        /* if (this.nowplayingList.length === 0) {
             Indicator.open({
                 text: '加载中...',
                 spinnerType: 'fading-circle'
             });
-            this.$store.dispatch('getNowplayingAction')
+            if(window.localStorage.getItem("cityId")){
+                this.$store.dispatch('getNowplayingAction',window.localStorage.getItem("cityId"))
+            } else {
+                this.$store.dispatch('getNowplayingAction',341100)
+            }
+        } */
+        Indicator.open({
+            text: '加载中...',
+            spinnerType: 'fading-circle'
+        });
+        if(window.localStorage.getItem("cityId")){
+            this.$store.dispatch('getNowplayingAction',window.localStorage.getItem("cityId"))
+        } else {
+            this.$store.dispatch('getNowplayingAction',110100)
         }
     },
     methods: {
         handleClick(data) {
             this.$router.push({name:'details',params:{uid:data}})
+        },
+        loadMore(){
+            // console.log('到底了')
         }
     }
 }
@@ -52,10 +94,11 @@ export default {
 <style lang="scss" scoped>
     #content .movie_body{
         flex: 1;
-        overflow: auto;
+        overflow: hidden;
         ul{
             margin: 0 12px;
-            overflow: hidden;
+            // max-height: 600px;
+            // overflow-y: auto;
             li{
                 margin-top: 12px;
                 display: flex;

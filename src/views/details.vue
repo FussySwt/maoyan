@@ -57,7 +57,7 @@
 <script>
 import axios from 'axios'
 import detailSwiper from './detail/DetailSwiper'
-import { MessageBox } from 'mint-ui'
+import { MessageBox,Indicator } from 'mint-ui'
 // import bus from '@/bus'
 export default {
   props: ['id'],
@@ -94,10 +94,17 @@ export default {
       }
     }
   },
+  beforeUpdate () {
+    window.onscroll = null
+  },
   mounted () {
     /* console.log(this.$route.params.uid)
     console.log(this.id) */
     this.data = this.$route.params.uid
+    Indicator.open({
+      text: '加载中...',
+      spinnerType: 'fading-circle'
+    });
     axios({
       url: `https://m.maizuo.com/gateway?filmId=${this.data}&k=5197937`,
       headers: {
@@ -107,6 +114,7 @@ export default {
     }).then(res => {
       // console.log(res.data.data.film)
       this.dataObj = res.data.data.film
+      Indicator.close()
       // console.log(this.dataObj.isSale)
       if (this.dataObj.isSale === false) {
         MessageBox({

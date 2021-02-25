@@ -9,7 +9,8 @@ export default new Vuex.Store({
   state: {
     nowplayingList: [],
     commingsoonList: [],
-    cinemaList:[]
+    cinemaList:[],
+    isLocate:false
   },
   mutations: {
     getNowplayingMutation(state,data){
@@ -20,12 +21,15 @@ export default new Vuex.Store({
     },
     cinemaListMutation(state,data){
       state.cinemaList = data
+    },
+    changeLocate(state,data){
+      state.isLocate = data
     }
   },
   actions: {
-    getNowplayingAction(store){
+    getNowplayingAction(store,id){
       axios({
-        url:'https://m.maizuo.com/gateway?cityId=341100&pageNum=1&pageSize=10&type=1&k=8165506',
+        url:`https://m.maizuo.com/gateway?cityId=${id}&pageNum=1&pageSize=10&type=1&k=8165506`,
         headers:{
           'X-Client-Info': '{"a":"3000","ch":"1002","v":"5.0.4","e":"16132234251904032016760833","bc":"341100"}',
           'X-Host': 'mall.film-ticket.film.list'
@@ -35,9 +39,9 @@ export default new Vuex.Store({
         Indicator.close();
       })
     },
-    getCommingSoonMutation(store){
+    getCommingSoonMutation(store,id){
       axios({
-        url:'https://m.maizuo.com/gateway?cityId=440100&pageNum=1&pageSize=10&type=2&k=270168',
+        url:`https://m.maizuo.com/gateway?cityId=${id}&pageNum=1&pageSize=10&type=2&k=270168`,
         headers:{
           'X-Client-Info': '{"a":"3000","ch":"1002","v":"5.0.4","e":"16132234251904032016760833","bc":"440100"}',
           'X-Host': 'mall.film-ticket.film.list'
