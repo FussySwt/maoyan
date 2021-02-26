@@ -106,6 +106,8 @@ export default {
             console.log(newArr)
             this.$store.commit('cinemaListMutation',newArr)
             this.$refs.cityMap.style.display = "none"
+            this.isMove = false
+            this.$refs.rot.classList.remove('rotate')
         }
     }
 }
