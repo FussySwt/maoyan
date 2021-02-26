@@ -91,6 +91,10 @@ export default {
             this.datalist = res.data.data.films
             Indicator.close()
         })
+
+        window.onscroll = function(){
+            console.log(1)
+        }
     },
     methods: {
         handleChangePage(data){

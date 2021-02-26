@@ -91,7 +91,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    #content .search_body{
+    .search_body{
         flex:1;
         overflow:auto;
         .search_input{
