@@ -6,6 +6,7 @@ import CenterRouter from './center'
 import CityRouter from './city'
 import SearchListRouter from './searchlist'
 import DetailsRouter from './details'
+import DetailPhotosRouter from './photos'
 
 Vue.use(VueRouter)
 
@@ -19,6 +20,7 @@ const router = new VueRouter({
     CityRouter,
     SearchListRouter,
     DetailsRouter,
+    DetailPhotosRouter,
     {
       path: '/',
       redirect: '/film/nowplaying'

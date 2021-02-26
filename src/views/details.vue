@@ -38,7 +38,7 @@
       <div id="photos">
         <div id="allphotos">
           <span>剧照</span>
-          <span class="ph">全部({{dataObj.photos.length}}) ></span>
+          <span class="ph" @click="handlePhotos(dataObj.filmId)">全部({{dataObj.photos.length}}) ></span>
         </div>
         <detailSwiper preview="4" class="photoClass" myClass="photoClass">
         <div class="swiper-slide" v-for="(data,index) in dataObj.photos" :key="index">
@@ -93,6 +93,10 @@ export default {
       } else {
         this.$refs.mytitle.classList.add('hide')
       }
+    },
+    handlePhotos(id){
+      // console.log(id)
+      this.$router.push({name:'photos',params:{uid:id}})
     }
   },
   mounted () {
@@ -129,7 +133,7 @@ export default {
     })
     window.onscroll = this.handleScroll
   },
-  deforeDestroy(){
+  beforeDestroy(){
     window.onscroll = null
   },
   components: {

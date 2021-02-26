@@ -1,35 +1,61 @@
 <template>
-    <div class="movie_body">
-        <ul>
-            <li v-for="data in commingsoonList" :key="data.filmId" @click="handleClick(data.filmId)">
-                <div class="pic_show"><img :src="data.poster" alt=""></div>
-                <div class="info_list">
-                    <h2>{{data.name}}</h2>
-                    <p>主演：{{data.actors | actorfilter}}</p>
-                    <p>2021-3-1上映</p>
-                </div>
-                <div class="btn_pre">
-                    预售
-                </div>
-            </li>
-        </ul>
-        <footer class="hide" ref="foot">
-            ----到底了----
-        </footer>
-    </div>
+    <ul v-infinite-scroll="loadMore"
+  infinite-scroll-disabled="loading" infinite-scroll-distance="0" infinite-scroll-immediate-check="false">
+        <li v-for="(data,index) in datalist" :key="index" @click="handleChangePage(data.filmId)">
+            <div class="img">
+                <img :src="data.poster" alt="">
+            </div>
+            <div class="intro">
+                <h3>{{data.name}}</h3>
+                <p>观众评分：<span class="score">{{data.grade}}</span></p>
+                <p v-if="data.actors">主演：{{actorfilt(index)}}</p>
+                <p v-else>暂无主演</p>
+                <p>{{data.nation}} | {{data.runtime}}分钟</p>
+            </div>
+            <div class="book">
+                <!-- <button>购票</button> -->
+                购票
+            </div>
+        </li>
+        <div v-if="isShow" class="loadingModule">加载中......</div>
+        <div v-else class="loadingModule">----已经到底了----</div>
+    </ul>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { Indicator } from 'mint-ui';
+import axios from 'axios'
 import Vue from 'vue'
 Vue.filter('actorfilter',(item)=>{
     return item.map(item=>item.name).join(" ")
 })
 export default {
     name: 'CommingSoon',
+    data () {
+        return {
+            datalist: [],
+            loading:false,
+            isShow:true,
+            CNow:1
+        }
+    },
     computed: {
-        ...mapState(['commingsoonList'])
+        actorfilt(){
+            return function(index){
+                var arr = []
+                for(var i = 0; i < this.datalist.length;i++){
+                    if(i == index){
+                        arr = this.datalist[index].actors
+                        break
+                    }
+                }
+                var newArr = []
+                for(var j = 0; j < arr.length; j++){
+                    newArr.push(arr[j].name)
+                }
+                return newArr.join(" ")
+            }
+        }
     },
     mounted () {
         Indicator.open({
@@ -37,81 +63,120 @@ export default {
             spinnerType: 'fading-circle'
         });
         if(window.localStorage.getItem("cityId")){
-            this.$store.dispatch('getCommingSoonMutation',window.localStorage.getItem("cityId"))
+            this.cityid = window.localStorage.getItem("cityId")
         } else {
-            this.$store.dispatch('getCommingSoonMutation',110100)
+            this.cityid = 110100
         }
-            // console.log(this.nowplayingList)
-        // console.log(this.commingsoonList)
-    },
-    updated () {
-        this.$refs.foot.classList.remove('hide')
+        axios({
+        url:`https://m.maizuo.com/gateway?cityId=${this.cityid}&pageNum=1&pageSize=10&type=2&k=8165506`,
+            headers:{
+            'X-Client-Info': '{"a":"3000","ch":"1002","v":"5.0.4","e":"16132234251904032016760833","bc":"341100"}',
+            'X-Host': 'mall.film-ticket.film.list'
+            }
+        }).then(res => {
+            this.datalist = res.data.data.films
+            Indicator.close()
+        })
     },
     methods: {
         handleClick(data) {
             this.$router.push({name:'details',params:{uid:data}})
+        },
+        loadMore(){
+            console.log('到底了')
+            this.loading = true
+            this.CNow++
+            if(window.localStorage.getItem("cityId")){
+                this.cityid = window.localStorage.getItem("cityId")
+            } else {
+                this.cityid = 110100
+            }
+            axios({
+                url: `https://m.maizuo.com/gateway?cityId=${this.cityid}&pageNum=${this.CNow}&pageSize=10&type=2&k=8165506`,
+                headers: {
+                'X-Client-Info': '{"a":"3000","ch":"1002","v":"5.0.4","e":"16132234251904032016760833","bc":"341100"}',
+                'X-Host': 'mall.film-ticket.film.list'
+                }
+            }).then(res=>{
+                if(res.data.data.films.length>0){
+                    this.datalist = [...this.datalist,...res.data.data.films]
+                    this.loading = false
+                }else{
+                    this.isShow = false
+                }
+            })
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-    #content .movie_body{
-        flex: 1;
-        overflow: auto;
-        ul{
-            margin: 0 12px;
-            overflow: hidden;
-            li{
-                margin-top: 12px;
-                display: flex;
-                align-items: center;
-                border-bottom: 1px solid #e6e6e6;
-                padding-bottom: 10px;
-            }
-        }
-        .pic_show{
+    ul{
+      margin: 0 12px;
+      margin-bottom: 50px;
+      li{
+        display: flex;
+        align-items: center;
+        margin-top: 12px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e6e6e6;
+        // background-color: white;
+        .img{
             width: 64px;
             height: 90px;
-            img{
-                width: 100%;
-                height: 100%;
-            }
+            /* display: flex;
+            flex-shrink: 0;
+            justify-content: center;
+            align-items: center; */
+          img{
+            width: 100%;
+            height: 100%;
+          }
         }
-        .info_list{
+        .intro{
             margin-left: 10px;
             flex: 1;
             position: relative;
-            h2{
-                font-size: 17px;
-                line-height: 24px;
-                width: 150px;
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
+          /* min-width: 0;
+          display: flex;
+          flex-grow: 1;
+          flex-direction: column;
+          justify-content: center; */
+          h3{
+            font-size: 17px;
+            line-height: 24px;
+            width: 150px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+          p{
+            font-size: 13px;
+            color: #666;
+            line-height: 22px;
+            width: 200px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
             }
-            p{
-                font-size: 13px;
-                color: #666;
-                line-height: 22px;
-                width: 200px;
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-            }
-            .grade{
-                font-weight: 700;
-                color: #faaf00;
-                font-size: 15px;
-            }
-            img{
-                width: 50px;
-                position: absolute;
-                right: 10px;
-                top: 5px;
-            }
+          .score{
+            font-weight: 700;
+            color: #faaf00;
+            font-size: 15px;
+          }
         }
-        .btn_mall,.btn_pre{
+        .book{
+          /* height: 100%;
+          width: 70px;
+          flex-shrink: 0;
+          button{
+          height: 30px;
+          width: 50px;
+          border: none;
+          border-radius: 5px;
+          background-color: lightsalmon;
+          color: white;
+        } */
             width: 47px;
             height: 27px;
             line-height: 28px;
@@ -122,17 +187,17 @@ export default {
             font-size: 12px;
             cursor: pointer;
         }
-        .btn_pre{
-            background-color: #3c9fe6;
-        }
-        footer{
-            height: 50px;
-            background-color: #FAFAFA;
-            line-height: 50px;
-            text-align: center;
-        }
-        .hide{
-            display: none;
-        }
+        span{font-size: 13px;color: #797D82;}
+      }
+      .loadingModule{
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+      }
+    }
+    .loading{
+      height: 100px;
+      line-height: 100px;
+      text-align: center;
     }
 </style>
