@@ -96,14 +96,14 @@ export default {
             }
         },
         changeArea(id){
-            console.log(id)
+            // console.log(id)
             var newArr = []
             for(var i = 0; i < this.cinemaList.length; i++){
                 if(this.cinemaList[i].districtId == id){
                     newArr.push(this.cinemaList[i])
                 }
             }
-            console.log(newArr)
+            // console.log(newArr)
             this.$store.commit('cinemaListMutation',newArr)
             this.$refs.cityMap.style.display = "none"
             this.isMove = false

@@ -14,6 +14,10 @@ npm run serve
 ```
 npm run build
 ```
+### Project Author
+```
+designed by Zhu
+```
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).

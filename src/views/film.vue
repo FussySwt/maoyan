@@ -58,7 +58,7 @@ export default {
                 name = res.data.data.cities.filter(item=>item.cityId == id)
                 this.cityName = name[0].name
             } else {
-                console.log('没有城市id')
+                // console.log('没有城市id')
             } 
             // console.log(name[0].name)
         })

@@ -5,7 +5,7 @@
             <div class="img">
                 <img :src="data.poster" alt="">
             </div>
-            <div class="intro">
+            <div class="intro" :style="`width:${fwidth}px`">
                 <h3>{{data.name}}</h3>
                 <p>观众评分：<span class="score">{{data.grade}}</span></p>
                 <p v-if="data.actors">主演：{{actorfilt(index)}}</p>
@@ -58,9 +58,13 @@ export default {
                 }
                 return newArr.join(" ")
             }
+        },
+        fwidth(){
+            return document.documentElement.clientWidth - 162
         }
     },
     mounted () {
+        var oIntro = document.getElementsByClassName('intro');
         /* if (this.nowplayingList.length === 0) {
             Indicator.open({
                 text: '加载中...',
@@ -91,9 +95,11 @@ export default {
             this.datalist = res.data.data.films
             Indicator.close()
         })
-
-        window.onscroll = function(){
-            console.log(1)
+        window.onresize = function(){
+            console.log(123)
+            for(var i = 0; i < oIntro.length; i++){
+                oIntro[i].style.width = document.documentElement.clientWidth - 162 + "px"
+            }
         }
     },
     methods: {
@@ -104,7 +110,7 @@ export default {
             this.$router.push({name:'details',params:{uid:data}})
         },
         loadMore(){
-            console.log('到底了')
+            // console.log('到底了')
             this.loading = true
             this.iNow++
             if(window.localStorage.getItem("cityId")){
@@ -175,7 +181,7 @@ export default {
             font-size: 13px;
             color: #666;
             line-height: 22px;
-            width: 200px;
+            // width: 200px;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;

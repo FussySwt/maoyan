@@ -7,13 +7,14 @@ import CityRouter from './city'
 import SearchListRouter from './searchlist'
 import DetailsRouter from './details'
 import DetailPhotosRouter from './photos'
+import AdminRouter from './admin'
 
 Vue.use(VueRouter)
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
-  // base: 'maoyan',
+  // base: process.env.BASE_URL,
+  base: 'maoyan',
   routes: [
     FilmRouter,
     CinemaRouter,
@@ -22,6 +23,7 @@ const router = new VueRouter({
     SearchListRouter,
     DetailsRouter,
     DetailPhotosRouter,
+    AdminRouter,
     {
       path: '/',
       redirect: '/film/nowplaying'

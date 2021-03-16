@@ -5,9 +5,8 @@
             <div class="img">
                 <img :src="data.poster" alt="">
             </div>
-            <div class="intro">
+            <div class="intro" :style="`width:${fwidth}px`">
                 <h3>{{data.name}}</h3>
-                <p>观众评分：<span class="score">{{data.grade}}</span></p>
                 <p v-if="data.actors">主演：{{actorfilt(index)}}</p>
                 <p v-else>暂无主演</p>
                 <p>{{data.nation}} | {{data.runtime}}分钟</p>
@@ -55,9 +54,13 @@ export default {
                 }
                 return newArr.join(" ")
             }
+        },
+        fwidth(){
+            return document.documentElement.clientWidth - 162
         }
     },
     mounted () {
+        var oIntro = document.getElementsByClassName("intro")
         Indicator.open({
             text: '加载中...',
             spinnerType: 'fading-circle'
@@ -77,13 +80,16 @@ export default {
             this.datalist = res.data.data.films
             Indicator.close()
         })
+        for(var i = 0; i < oIntro.length; i++){
+            oIntro.style.width = document.documentElement.clientWidth - 162 + 'px'
+        }
     },
     methods: {
-        handleClick(data) {
+        handleChangePage(data) {
             this.$router.push({name:'details',params:{uid:data}})
         },
         loadMore(){
-            console.log('到底了')
+            // console.log('到底了')
             this.loading = true
             this.CNow++
             if(window.localStorage.getItem("cityId")){
@@ -124,6 +130,7 @@ export default {
         .img{
             width: 64px;
             height: 90px;
+            flex-shrink: 0;
             /* display: flex;
             flex-shrink: 0;
             justify-content: center;
@@ -145,7 +152,7 @@ export default {
           h3{
             font-size: 17px;
             line-height: 24px;
-            width: 150px;
+            // width: 150px;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
@@ -154,7 +161,8 @@ export default {
             font-size: 13px;
             color: #666;
             line-height: 22px;
-            width: 200px;
+            flex: 1;
+            // width: 200px;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
@@ -177,6 +185,7 @@ export default {
           background-color: lightsalmon;
           color: white;
         } */
+            flex-shrink: 0;
             width: 47px;
             height: 27px;
             line-height: 28px;

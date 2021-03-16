@@ -25,7 +25,8 @@
             </ul>
             <div v-else class="noMovie" ref="noMovie">
                 <!-- 不存在该电影名 -->
-                <img src="/images/notFound.jpg" alt="">
+                <!-- <img src="/images/notFound.jpg" alt=""> -->
+                <img src="http://smstsn.com/images/timg.jpg" alt="">
             </div>
         </div>
     </div>

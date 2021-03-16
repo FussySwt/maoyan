@@ -2,7 +2,7 @@
     <div>
         <headbar title="个人中心"></headbar>
         <div id="content">
-            <login></login>
+            <router-view></router-view>
         </div>
         <tabbar></tabbar>
     </div>
@@ -10,13 +10,11 @@
 
 <script>
 import headbar from '@/components/Header'
-import login from '@/components/Login'
 import tabbar from '@/components/Tabbar'
 export default {
     components: {
         headbar,
-        tabbar,
-        login
+        tabbar
     }
 }
 </script>

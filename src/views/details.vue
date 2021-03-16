@@ -11,10 +11,11 @@
           <div class="file-name">
             <h3>{{dataObj.name}}</h3>
             <span class="dt">{{dataObj.filmType.name}}</span>
-            <span class="score">{{dataObj.grade}}分</span>
+            <span class="score" v-show="dataObj.grade">{{dataObj.grade}}分</span>
           </div>
           <p class="p">{{dataObj.category}}</p>
-          <p class="p">2021-02-12上映</p>
+          <p class="p">{{year}}上映</p>
+          <!-- <p class="p">{{new Date(dataObj.premiereAt*1000)}}上映</p> -->
           <p class="p">{{dataObj.nation}} | {{dataObj.runtime}}分钟</p>
           <div class="para" ref="myPara">
             <p class="paragraph" ref="myParagraph">{{dataObj.synopsis}}</p>
@@ -64,7 +65,8 @@ export default {
   data () {
     return {
       dataObj: null,
-      isHide: true
+      isHide: true,
+      year:''
     }
   },
   methods: {
@@ -97,6 +99,50 @@ export default {
     handlePhotos(id){
       // console.log(id)
       this.$router.push({name:'photos',params:{uid:id}})
+    },
+    handleTime(time){
+      var mon = '';
+      switch(time.substring(4,7)){
+        case 'Jan':
+          mon = "01";
+          break;
+        case 'Feb':
+          mon = '02';
+          break;
+        case 'Mar':
+          mon = '03';
+          break;
+        case 'Apr':
+          mon = '04';
+          break;
+        case 'May':
+          mon = '05';
+          break;
+        case 'Jun':
+          mon = '06';
+          break;
+        case 'Jul':
+          mon = '07';
+          break;
+        case 'Aug':
+          mon = '08';
+          break;
+        case 'Sep':
+          mon = '09';
+          break;
+        case 'Oct':
+          mon = '10';
+          break;
+        case 'Nov':
+          mon = '11';
+          break;
+        case 'Dec':
+          mon = '12';
+          break;
+      }
+      var day = time.substring(8,10);
+      var year = time.substring(11,15);
+      return `${year}-${mon}-${day}`;
     }
   },
   mounted () {
@@ -116,22 +162,54 @@ export default {
     }).then(res => {
       // console.log(res.data.data.film)
       this.dataObj = res.data.data.film
+      // console.log(this.handleTime(new Date(this.dataObj.premiereAt*1000).toString()))
+      this.year = this.handleTime(new Date(this.dataObj.premiereAt*1000).toString())
       Indicator.close()
       // console.log(this.dataObj.isSale)
-      if (this.dataObj.isSale === false) {
-        MessageBox({
-          title: '提示',
-          message: '该影片暂无档期，到首页看其他电影吧',
-          showCancelButton: true
-        }).then(res => {
-          if (res === 'confirm') {
-            this.$router.push('/film')
-          } else {
-          }
-        })
-      }
+      // if (this.dataObj.isSale === false) {
+      //   MessageBox({
+      //     title: '提示',
+      //     message: '该影片暂无档期，到首页看其他电影吧',
+      //     showCancelButton: true
+      //   }).then(res => {
+      //     if (res === 'confirm') {
+      //       this.$router.push('/film')
+      //     } else {
+      //     }
+      //   })
+      // }
     })
     window.onscroll = this.handleScroll
+  },
+  beforeRouteEnter(to,from,next){
+    console.log(from.path)
+    if(from.path === '/film/nowplaying' || '/film/commingsoon'){
+      next(vm=>{
+      // console.log(vm.$route.params.uid)
+        axios({
+          url: `https://m.maizuo.com/gateway?filmId=${vm.$route.params.uid}&k=5197937`,
+          headers: {
+            'X-Client-Info': '{"a":"3000","ch":"1002","v":"5.0.4","e":"16132234251904032016760833","bc":"341100"}',
+            'X-Host': 'mall.film-ticket.film.info'
+          }
+        }).then(res=>{
+          if (res.data.data.film.isSale === false) {
+            MessageBox({
+              title: '提示',
+              message: '该影片暂无档期，到首页看其他电影吧',
+              showCancelButton: true
+            }).then(res => {
+              if (res === 'confirm') {
+                vm.$router.push('/film')
+              } else {
+              }
+            })
+          }
+        })
+      })
+    }else{
+      next()
+    }
   },
   beforeDestroy(){
     window.onscroll = null

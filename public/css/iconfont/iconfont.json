@@ -27,6 +27,13 @@
       "unicode_decimal": 59035
     },
     {
+      "icon_id": "9196903",
+      "name": "LOGO谷歌",
+      "font_class": "google_drive",
+      "unicode": "e8f9",
+      "unicode_decimal": 59641
+    },
+    {
       "icon_id": "9896419",
       "name": "下 拉",
       "font_class": "xiala",

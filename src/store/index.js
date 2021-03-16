@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import { Indicator } from 'mint-ui';
+import user from './user'
 
 Vue.use(Vuex)
 
@@ -65,5 +66,6 @@ export default new Vuex.Store({
     }
   },
   modules: {
+    user
   }
 })
